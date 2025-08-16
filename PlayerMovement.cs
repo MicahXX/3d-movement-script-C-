@@ -66,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
 
-        velocity.y += gravity * Time.deltaTime; // pullt den character down
+        velocity.y += gravity * Time.deltaTime; 
         controller.Move(velocity * Time.deltaTime);
     }
 }
