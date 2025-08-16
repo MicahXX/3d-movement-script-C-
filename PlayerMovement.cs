@@ -26,12 +26,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask); // was es schauen soll bei gravity
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask); // checks if the player isGrounded
 
         
   
 
-        if (isGrounded && velocity.y < 0) // checkt position und macht das keine Gravity sein soll
+        if (isGrounded && velocity.y < 0) // checks position and then sets the gravity to a value
         {
             velocity.y = -2f;
         }
@@ -42,33 +42,29 @@ public class PlayerMovement : MonoBehaviour
 
         if(direction.magnitude >= 0.1f)
         {
-            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + camera.eulerAngles.y; // berechnet wohin wir uns drehen müssen
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref smoothVelocity, smoothTime); // smoothed die drehen (targetAngle)
-            transform.rotation = Quaternion.Euler(0f , angle, 0f); // drehen
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + camera.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref smoothVelocity, smoothTime); 
+            transform.rotation = Quaternion.Euler(0f , angle, 0f); // turn
 
-            Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward; // bewegt sich von der kamera nach vorne
-            controller.Move(moveDirection.normalized * speed * Time.deltaTime);  // bewegen
+            Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward; 
+            controller.Move(moveDirection.normalized * speed * Time.deltaTime);  // move
         }
 
-        if (Input.GetButtonDown("Sprint") && isGrounded) // macht das sprint nur aktiv ist wenn man Button runter hat.
+        if (Input.GetButtonDown("Sprint") && isGrounded) // makes character move faster when a button is Pressed
         {
             speed = 15f;
         }
 
-        if (Input.GetButtonUp("Sprint"))
+        if (Input.GetButtonUp("Sprint")) // stops the sprint when you let go of the is Pressed button
         {
             speed = 6f;
         }
 
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            velocity.y = Mathf.Sqrt(jump * -2.0f * gravity); // jumpt
+            velocity.y = Mathf.Sqrt(jump * -2.0f * gravity); // jump
         }
 
-        if(Input.GetButtonDown("Dash"))
-        {
-            
-        }
 
         velocity.y += gravity * Time.deltaTime; // pullt den character down
         controller.Move(velocity * Time.deltaTime);
